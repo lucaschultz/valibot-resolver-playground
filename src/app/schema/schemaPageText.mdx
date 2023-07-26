@@ -1,0 +1,39 @@
+# The Schema
+
+This is the schema validated in the example form:
+
+```ts
+import * as v from "valibot";
+
+const formSchema = v.object({
+  name: v.optional(
+    v.string([
+      v.minLength(2, "Name must be at least 2 characters."),
+      v.maxLength(50, "Name must be less than 50 characters."),
+    ])
+  ),
+  username: v.string([
+    v.minLength(2, "Username must be at least 2 characters."),
+  ]),
+  email: v.string([v.email("Please enter a valid email address.")]),
+  password: v.string([
+    v.minLength(8, "Password must be at least 8 characters."),
+    v.custom(
+      (value) => value.match(/[a-z]/) !== null,
+      "Password must contain at least one lowercase letter."
+    ),
+    v.custom(
+      (value) => !value.match(/[A-Z]/) !== null,
+      "Password must contain at least one uppercase letter."
+    ),
+    v.custom(
+      (value) => value.match(/[0-9]/) !== null,
+      "Password must contain at least one number."
+    ),
+    v.custom(
+      (value) => !value.match(/[^a-zA-Z0-9]/),
+      "Password must contain at least one special character."
+    ),
+  ]),
+});
+```
